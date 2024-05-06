@@ -20,11 +20,6 @@ public class CatAccountStatusServiceImpl implements CatAccountStatusService {
   }
 
   @Override
-  public CatAccountStatusDO create(CatAccountStatusDO statusDO) {
-    return repository.create(statusDO);
-  }
-
-  @Override
   public CatAccountStatusDO getById(long id) {
     return repository.getById(id).orElseThrow(() -> new RecordNotFoundException(
         String.format(Messages.ID_RECORD_NOT_FOUND, id)));

@@ -7,7 +7,6 @@ import com.mistborn.domain.model.CatAccountStatusDO;
 
 public interface CatAccountStatusRepository {
 
-  CatAccountStatusDO create(CatAccountStatusDO statusDO);
   Optional<CatAccountStatusDO> getById(long id);
   Optional<CatAccountStatusDO> getByDescription(String description);
   List<CatAccountStatusDO> findAll();

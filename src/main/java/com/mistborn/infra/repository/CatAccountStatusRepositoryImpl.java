@@ -13,13 +13,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class CatAccountStatusRepositoryImpl implements CatAccountStatusRepository {
 
   @Override
-  public CatAccountStatusDO create(CatAccountStatusDO statusDO) {
-    CatAccountStatusEntity entity = buildEntity(statusDO);
-    entity.persist();
-    return buildDO(entity);
-  }
-
-  @Override
   public Optional<CatAccountStatusDO> getById(long id) {
     CatAccountStatusEntity found = CatAccountStatusEntity.findById(id);
     return Optional.ofNullable(buildDO(found));
@@ -33,15 +26,14 @@ public class CatAccountStatusRepositoryImpl implements CatAccountStatusRepositor
 
   @Override
   public List<CatAccountStatusDO> findAll() {
-    List<CatAccountStatusEntity> found = CatAccountStatusEntity.findAll().firstResult();
+    List<CatAccountStatusEntity> found = CatAccountStatusEntity.findAll().list();
     return found.stream().map(this::buildDO).toList();
   }
 
-  private CatAccountStatusEntity buildEntity(CatAccountStatusDO statusDO) {
-    return new CatAccountStatusEntity(statusDO.getDescription());
-  }
-
   private CatAccountStatusDO buildDO(CatAccountStatusEntity entity) {
+    if (entity == null) {
+      return null;
+    }
     return new CatAccountStatusDO(entity.id, entity.getDescription(), entity.getCreatedAt());
   }
 }
