@@ -1,0 +1,47 @@
+package com.mistborn.infra.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.mistborn.domain.model.CatAccountStatusDO;
+import com.mistborn.domain.repository.CatAccountStatusRepository;
+import com.mistborn.infra.repository.entities.CatAccountStatusEntity;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class CatAccountStatusRepositoryImpl implements CatAccountStatusRepository {
+
+  @Override
+  public CatAccountStatusDO create(CatAccountStatusDO statusDO) {
+    CatAccountStatusEntity entity = buildEntity(statusDO);
+    entity.persist();
+    return buildDO(entity);
+  }
+
+  @Override
+  public Optional<CatAccountStatusDO> getById(long id) {
+    CatAccountStatusEntity found = CatAccountStatusEntity.findById(id);
+    return Optional.ofNullable(buildDO(found));
+  }
+
+  @Override
+  public Optional<CatAccountStatusDO> getByDescription(String description) {
+    CatAccountStatusEntity found = CatAccountStatusEntity.find("description", description).firstResult();
+    return Optional.ofNullable(buildDO(found));
+  }
+
+  @Override
+  public List<CatAccountStatusDO> findAll() {
+    List<CatAccountStatusEntity> found = CatAccountStatusEntity.findAll().firstResult();
+    return found.stream().map(this::buildDO).toList();
+  }
+
+  private CatAccountStatusEntity buildEntity(CatAccountStatusDO statusDO) {
+    return new CatAccountStatusEntity(statusDO.getDescription());
+  }
+
+  private CatAccountStatusDO buildDO(CatAccountStatusEntity entity) {
+    return new CatAccountStatusDO(entity.id, entity.getDescription(), entity.getCreatedAt());
+  }
+}
